@@ -9,7 +9,7 @@ const Header = () => {
             </div>
             <button
                 className="bg-transparent border-none cursor-pointer"
-                onClick={() => window.location.href = "https://github.com/AmritanshuPrashar"}
+                onClick={() => window.location.href = "https://github.com/AmritanshuPrashar/leetcode-tracker"}
             >
                 <div className="flex flex-col items-center">
                     <img
