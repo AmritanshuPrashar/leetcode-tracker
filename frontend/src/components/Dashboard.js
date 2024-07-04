@@ -14,7 +14,7 @@ const Dashboard = () => {
     useEffect(() => {
         if (fetchData) {
             setLoading(true);
-            fetch(`http://localhost:3000/${user}`)
+            fetch(`https://leetcode-tracker-backend.onrender.com/${user}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.message === "No user Found") {
