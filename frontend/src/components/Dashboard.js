@@ -3,6 +3,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import SubmissionsChart from './SubmissionsChart';
 import RecentSubmissions from './RecentSubmissions';
 import Header from './Header';
+import { BarLoader } from 'react-spinners';
+import '../App.css';
 
 const Dashboard = () => {
     const [data, setData] = useState(null);
@@ -37,9 +39,22 @@ const Dashboard = () => {
     }, [fetchData, user]);
 
     const handleFetchData = () => {
-        setData(null); // Clear existing data
-        setFetchData(true); // Trigger data fetching
+        setData(null);
+        setFetchData(true);
     };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleFetchData();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     return (
         <div className="p-4 min-h-screen bg-[#0B0B0D] text-[#EFEFEF] relative">
@@ -68,19 +83,29 @@ const Dashboard = () => {
                     Fetch Data
                 </button>
             </div>
-            <div className="mb-4 text-center">
-                {loading ? (
-                    <p className="text-lg">Loading data...</p>
-                ) : data ? (
-                    <>
-                        <p className="block font-sans text-base antialiased font-light leading-relaxed">Total Solved: {data.totalSolved}</p>
-                        <p className="block font-sans text-base antialiased font-light leading-relaxed">Ranking: {data.ranking}</p>
-                        <p className="block font-sans text-base antialiased font-light leading-relaxed">Contribution Points: {data.contributionPoint}</p>
-                    </>
-                ) : (
-                    <p className="text-lg">No data available. Please fetch data for a user.</p>
-                )}
+            <div className="mb-4 text-middle">
+            {loading ? (
+                <>
+                    <div className="flex justify-center items-center h-full">
+                        <BarLoader size={6} color="#0377ff" />
+                    </div>
+                    <div className='block text-center mt-2 font-sans text-base antialiased font-light leading-relaxed'>
+                        <p>Loading data...</p>
+                        <p className='ml-5 text-[10px] mt-1'>(Can take a minute, as the server is starting up)</p>
+                    </div>
+                </>
+            ) : data ? (
+                <>
+                    <p className="block font-sans text-base antialiased font-light leading-relaxed">Total Solved: {data.totalSolved}</p>
+                    <p className="block font-sans text-base antialiased font-light leading-relaxed">Ranking: {data.ranking}</p>
+                    <p className="block font-sans text-base antialiased font-light leading-relaxed">Contribution Points: {data.contributionPoint}</p>
+                </>
+            ) : (
+                <p className="text-lg font-sans antialiased font-light leading-relaxed">No data available. Please fetch data for a user.</p>
+            )}
+            
             </div>
+
             {error && <p className="text-red-500 text-center">{error}</p>}
             {data && (
                 <div className="flex flex-col items-center">
